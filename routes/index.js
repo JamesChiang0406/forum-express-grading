@@ -21,6 +21,13 @@ module.exports = (app, passport) => {
     }
     res.redirect('/signin')
   }
+  const permission = (req, res, next) => {
+    if (Number(helpers.getUser(req).id) !== Number(req.params.id)) {
+      req.flash('error_messages', 'Unauthorized access!')
+      return res.redirect(`/users/${req.user.id}`)
+    }
+    return next()
+  }
 
   app.get('/', authenticated, (req, res) => res.redirect('/restaurants'))
   app.get('/restaurants', authenticated, restController.getRestaurants)
@@ -50,5 +57,8 @@ module.exports = (app, passport) => {
   app.get('/signin', userController.signInPage)
   app.post('/signin', passport.authenticate('local', { failureRedirect: '/signin', failureFlash: true }), userController.signIn)
   app.get('/logout', userController.logout)
-  app.get('/users/:id', authenticated, userController.getUser)
+
+  app.get('/users/:id', authenticated, permission, userController.getUser)
+  app.get('/users/:id/edit', authenticated, permission, userController.editUser)
+  app.put('/users/:id', authenticated, permission, upload.single('image'), userController.putUser)
 }
