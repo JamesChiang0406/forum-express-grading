@@ -7,8 +7,22 @@
       <div class="card-body">
         <h5 class="card-title">{{user.name}}</h5>
         <p class="card-text">{{user.email}}</p>
+        <p class="card-text">{{restAmount}} 已評論餐廳</p>
         <a href="/users/{{user.id}}/edit" class="btn btn-primary">edit</a>
       </div>
     </div>
+  </div>
+</div>
+
+<div class="card">
+  <div class="card-header">
+    {{restAmount}} 已評論餐廳
+  </div>
+  <div class="card-body">
+    {{#each comments}}
+    <a href="/restaurants/{{this.Restaurant.id}}">
+      <img src="{{this.Restaurant.image}}" alt="restaurant-link" width="200px" height="200px">
+    </a>
+    {{/each}}
   </div>
 </div>
