@@ -136,6 +136,23 @@ const userController = {
             return res.redirect('back')
           })
       })
+  },
+
+  getTopRest: (req, res) => {
+    Restaurant.findAll({
+      include: [{ model: User, as: 'LikedUsers' }]
+    })
+      .then(restaurants => {
+        restaurants = restaurants.map(r => ({
+          ...r.dataValues,
+          description: r.dataValues.description.substring(0, 50),
+          LikerCount: r.dataValues.LikedUsers.length,
+          isLiked: req.user.LikedRestaurants.map(lr => lr.id).includes(r.id)
+        }))
+        restaurants = restaurants.sort((a, b) => b.LikerCount - a.LikerCount)
+        restaurants = restaurants.slice(0, 10)
+        return res.render('topRest', { restaurants })
+      })
   }
 }
 
