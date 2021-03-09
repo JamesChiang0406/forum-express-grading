@@ -131,13 +131,12 @@ const adminService = {
     }
   },
 
-  deleteRestaurant: (req, res) => {
+  deleteRestaurant: (req, res, callback) => {
     return Restaurant.findByPk(req.params.id)
       .then((restaurant) => {
         restaurant.destroy()
           .then((restaurant) => {
-            req.flash('success_messages', 'restaurant was successfully deleted')
-            res.redirect('/admin/restaurants')
+            callback({ status: 'success', message: '' })
           })
       })
   },
