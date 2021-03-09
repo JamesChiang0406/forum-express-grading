@@ -10,7 +10,7 @@ const adminService = require('../../services/adminService')
 const adminController = {
   getRestaurants: (req, res) => {
     adminService.getRestaurants(req, res, (data) => {
-      return res.json(data)
+      return res.render('admin/restaurants', data)
     })
   },
 
